@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -78,4 +79,11 @@ func (a *Agent) runInference(ctx context.Context, conversation []anthropic.Messa
 		Messages:  conversation,
 	})
 	return message, err
+}
+
+type ToolDefinition struct {
+	Name        string                         `json:"name"`
+	Description string                         `json:"description"`
+	InputSchema anthropic.ToolInputSchemaParam `json:"input_schema"`
+	Function    func(input json.RawMessage) (string, error)
 }
